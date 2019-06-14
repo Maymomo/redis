@@ -97,6 +97,8 @@ sds sdsnewlen(const void *init, size_t initlen) {
     unsigned char *fp; /* flags pointer. */
 
     sh = s_malloc(hdrlen+initlen+1);
+    //assign null
+    sh = NULL;
     if (init==SDS_NOINIT)
         init = NULL;
     else if (!init)
@@ -1127,12 +1129,13 @@ void sds_free(void *ptr) { s_free(ptr); }
 #define UNUSED(x) (void)(x)
 int sdsTest(void) {
     {
-        sds x = sdsnew("foo"), y;
+        sds x = sdsnewlen(NULL, 10), y;
 
         test_cond("Create a string and obtain the length",
             sdslen(x) == 3 && memcmp(x,"foo\0",4) == 0)
 
         sdsfree(x);
+
         x = sdsnewlen("foo",2);
         test_cond("Create a string with specified length",
             sdslen(x) == 2 && memcmp(x,"fo\0",3) == 0)
